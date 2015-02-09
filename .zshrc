@@ -88,12 +88,6 @@ source $B4SH_PATH/all.sh
 
 alias gb="git branch -av"
 alias my="mysql -uroot -proot"
-alias wr="cd ~/_work/card.com/webroot"
-alias wrc="cd ~/_work/card.com/webroot-clean"
-alias wrr="cd ~/_work/card.com/webroot-review"
-
-# When did we last get db's from dropbox?
-alias lastbak="ls -l ~/Dropbox\ \(CARD.COM\)/card_db_backups | grep sanitize | cut -d ' ' -f 8-15"
 
 # Tail the debug file.
 alias readdd="tail -f /tmp/drupal_debug.txt"
@@ -121,14 +115,8 @@ function vd {
   drush ev "var_dump($1);"
 }
 
-# Login as superuser
-function uliadmin {
-  foo=`drush $1 uli --browser=0 19`
-  echo $foo | pbcopy && echo $foo
-}
-
-# Login as normal user
-function ulinormal {
-  foo=`drush $1 uli --browser=0 42888`
+# Login as user
+function uli {
+  foo=`drush $1 uli --browser=0 $2`
   echo $foo | pbcopy && echo $foo
 }
