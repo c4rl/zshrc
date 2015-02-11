@@ -91,6 +91,10 @@ alias my="mysql -uroot -proot"
 alias wr="cd ~/_work/card.com/webroot"
 alias wrc="cd ~/_work/card.com/webroot-clean"
 alias wrr="cd ~/_work/card.com/webroot-review"
+alias jenks="cd ~/_work/jenkity_scripts/"
+
+# Update search index
+alias upsi="drush vset search_cron_limit 5000 && drush -v cron"
 
 # When did we last get db's from dropbox?
 alias lastbak="ls -l ~/Dropbox\ \(CARD.COM\)/card_db_backups | grep sanitize | cut -d ' ' -f 8-15"
