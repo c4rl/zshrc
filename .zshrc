@@ -45,7 +45,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git composer)
 
 # User configuration
 
@@ -91,6 +91,7 @@ alias my="mysql -uroot -proot"
 alias wr="cd ~/_work/card.com/webroot"
 alias wrc="cd ~/_work/card.com/webroot-clean"
 alias wrr="cd ~/_work/card.com/webroot-review"
+alias app="cd ~/_work/cardapp"
 alias jenks="cd ~/_work/jenkity_scripts/"
 
 # Update search index
@@ -99,8 +100,25 @@ alias upsi="drush vset search_cron_limit 5000 && drush -v cron"
 # When did we last get db's from dropbox?
 alias lastbak="ls -l ~/Dropbox\ \(CARD.COM\)/card_db_backups | grep sanitize | cut -d ' ' -f 8-15"
 
+alias sincelastdeploy="git fetch && git log origin/master..origin/chp-working  | grep 'pull request' && git log origin/master..origin/chp-working  | grep 1337"
+alias isincelastdeploy="git diff origin/master..origin/chp-working --name-only | grep .install | xargs -I__INSTALL__ git diff origin/master..origin/chp-working __INSTALL__ | cat"
+alias diffdeploy="git diff origin/master..origin/chp-working"
+
 # Tail the debug file.
 alias readdd="tail -f /tmp/drupal_debug.txt"
+# Tail the debug file.
+function wipedd {
+  FILE=/tmp/drupal_debug.txt
+  touch $FILE
+  chmod 777 $FILE
+  now=`date`
+  echo "### START READ $now ###" > $FILE
+}
+
+# Sync card.com environments.
+function cardsync {
+  ~/_work/card.com/sync.sh $1
+}
 
 # =======
 # = Git =
@@ -122,7 +140,15 @@ function gdk {
 
 # Variable dump expression.
 function vd {
-  drush ev "var_dump($1);"
+  if [[ $2 != '' ]]; then
+    var=$2
+    da=$1
+  else
+    da=''
+    var=$1
+  fi
+
+  drush $da ev "var_dump($var);"
 }
 
 # Login as superuser
@@ -136,3 +162,10 @@ function ulinormal {
   foo=`drush $1 uli --browser=0 42888`
   echo $foo | pbcopy && echo $foo
 }
+
+# =======
+# = Etc =
+# =======
+
+alias serve="python -m SimpleHTTPServer 8000"
+alias drupalcs="phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme"
